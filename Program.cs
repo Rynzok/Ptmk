@@ -15,33 +15,47 @@ namespace Ptmk
             string connectionString = ConfigurationManager.ConnectionStrings["ptmk"].ConnectionString;
             var conn = Workdb.Connect(connectionString);
 
-
-            if (args[0] == "1")
+            switch (args[0])
             {
-                string sql = $@"
+                case "1":
+                    string sql = $@"
                                     CREATE TABLE IF NOT EXISTS Employees(
                                     Id SERIAL PRIMARY KEY,
                                     Name CHARACTER VARYING(40),
                                     Date DATE,
                                     Sex CHARACTER VARYING(10),
-                                    Age INTEGER)
+                                    Age INT)
                               ";
 
-                var result = await Workdb.CreateDb(conn, sql);
-                if (result == true)
-                {
-                    Console.WriteLine("Good");
-                }
-                else
-                {
-                    Console.WriteLine("Error");
-                }       
-            }
-            else
-            {
-                Console.WriteLine("What?");
+                    var result = await Workdb.CreateDb(conn, sql);
+                    if (result == true)
+                    {
+                        Console.WriteLine("Good");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Error");
+                    }
+                    break;
+
+                case "2":
+                    var employee = new Employee(args[1], args[2], args[3]);
+                    employee.calAge();
+                    result = await employee.AddDb(conn);
+                    if (result == true)
+                    {
+                        Console.WriteLine("Good");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Error");
+                    }
+                    break;
+
 
             }
+            
+
 
             foreach (string arg in args)
             {   
